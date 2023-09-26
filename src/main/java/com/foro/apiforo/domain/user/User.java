@@ -19,7 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class User implements UserDetails {
+public class User implements UserDetails {   //UserDetails:se utiliza para el login
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -38,7 +38,7 @@ public class User implements UserDetails {
 
     private boolean flag;
 
-    public User(InsertDataUser insertDataUser) {
+    public User(DataUserInsert insertDataUser) {
         this.flag = true;
         this.email = insertDataUser.email();
         this.password = hashPassword(insertDataUser.password());
@@ -47,25 +47,26 @@ public class User implements UserDetails {
         this.lastname = insertDataUser.lastname();
     }
 
-    public void updateData (UpdateDataUser updateDataUser){
-        if (updateDataUser.password() != null){
-            this.password = updateDataUser.password();
+    public void updateData (DataUserUpdate dataUserUpdate){
+        if (dataUserUpdate.password() != null){
+            this.password = dataUserUpdate.password();
         }
-        if (updateDataUser.name() != null){
-            this.name = updateDataUser.name();
+        if (dataUserUpdate.name() != null){
+            this.name = dataUserUpdate.name();
         }
-        if (updateDataUser.lastname() != null){
-            this.name = updateDataUser.lastname();
+        if (dataUserUpdate.lastname() != null){
+            this.name = dataUserUpdate.lastname();
         }
-    }
-
-    private static String hashPassword(String password_plaintext) {
-        String salt = BCrypt.gensalt(10);
-        return BCrypt.hashpw(password_plaintext, salt);
     }
 
     public void disableUser() {
         this.flag = false;
+    }
+
+    //Solo se realiza para el login
+    private static String hashPassword(String password_plaintext) {
+        String salt = BCrypt.gensalt(10);
+        return BCrypt.hashpw(password_plaintext, salt);
     }
 
     @Override

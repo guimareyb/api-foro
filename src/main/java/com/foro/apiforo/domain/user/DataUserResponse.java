@@ -1,6 +1,6 @@
 package com.foro.apiforo.domain.user;
 
-public record ResponseDataUser(
+public record DataUserResponse(
         Long id,
         String email,
         UserType userType,
@@ -8,7 +8,7 @@ public record ResponseDataUser(
         String lastname
 ) {
 
-    public ResponseDataUser (User user){
+    public DataUserResponse(User user){
         this(
                 user.getId(),
                 user.getEmail(),

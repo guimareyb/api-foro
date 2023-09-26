@@ -22,31 +22,31 @@ public class UserController {
     private UserRepository userRepository;
 
     @PostMapping
-    public ResponseEntity<ResponseDataUser> insertUser (@Valid @RequestBody InsertDataUser insertDataUser, UriComponentsBuilder uriComponentsBuilder){
-        User user = userRepository.save(new User(insertDataUser));
-        ResponseDataUser responseDataUser = new ResponseDataUser(user);
+    public ResponseEntity<DataUserResponse> insertUser (@Valid @RequestBody DataUserInsert dataUserInsert, UriComponentsBuilder uriComponentsBuilder){
+        User user = userRepository.save(new User(dataUserInsert));
+        DataUserResponse dataUserResponse = new DataUserResponse(user);
         URI url = uriComponentsBuilder.path("/users/{id}").buildAndExpand(user.getId()).toUri();
-        return ResponseEntity.created(url).body(responseDataUser);
+        return ResponseEntity.created(url).body(dataUserResponse);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseDataUser> responseDataUser(@PathVariable Long id){
+    public ResponseEntity<DataUserResponse> responseDataUser(@PathVariable Long id){
         User user = userRepository.getReferenceById(id);
-        return ResponseEntity.ok(new ResponseDataUser(user));
+        return ResponseEntity.ok(new DataUserResponse(user));
     }
 
     @GetMapping
-    public ResponseEntity<Page<ResponseDataUser>> listUsers(@PageableDefault(size = 10, sort = "email") Pageable pageable){
-        return ResponseEntity.ok(userRepository.findByFlagTrue(pageable).map(ResponseDataUser::new));
+    public ResponseEntity<Page<DataUserResponse>> listUsers(@PageableDefault(size = 10, sort = "email") Pageable pageable){
+        return ResponseEntity.ok(userRepository.findByFlagTrue(pageable).map(DataUserResponse::new));
     }
 
     @PutMapping
     @Transactional
-    public ResponseEntity<ResponseDataUser> updateUser(@RequestBody @Valid UpdateDataUser updateDataUser){
-        User user = userRepository.getReferenceById(updateDataUser.id()); // Traer usuario de la Base de Datos
-        user.updateData(updateDataUser); // Actualizar usuario
-        ResponseDataUser responseDataUser = new ResponseDataUser(user);
-        return ResponseEntity.ok(responseDataUser);
+    public ResponseEntity<DataUserResponse> updateUser(@RequestBody @Valid DataUserUpdate dataUserUpdate){
+        User user = userRepository.getReferenceById(dataUserUpdate.id()); // Traer usuario de la Base de Datos
+        user.updateData(dataUserUpdate); // Actualizar usuario
+        DataUserResponse dataUserResponse = new DataUserResponse(user);
+        return ResponseEntity.ok(dataUserResponse);
     }
 
     @DeleteMapping("/{id}")

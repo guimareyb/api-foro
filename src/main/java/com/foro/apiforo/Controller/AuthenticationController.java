@@ -1,6 +1,6 @@
 package com.foro.apiforo.Controller;
 
-import com.foro.apiforo.domain.user.AuthenticationDataUser;
+import com.foro.apiforo.domain.user.DataUserAuthentication;
 import com.foro.apiforo.domain.user.User;
 import com.foro.apiforo.infra.security.DataJWTToken;
 import com.foro.apiforo.infra.security.TokenService;
@@ -26,7 +26,7 @@ public class AuthenticationController {
     private TokenService tokenService;
 
     @PostMapping
-    public ResponseEntity<DataJWTToken> authenticationUser(@RequestBody @Valid AuthenticationDataUser authenticationDataUser){
+    public ResponseEntity<DataJWTToken> authenticationUser(@RequestBody @Valid DataUserAuthentication authenticationDataUser){
         Authentication authenticationToken = new UsernamePasswordAuthenticationToken(authenticationDataUser.email(), authenticationDataUser.password());
         var authenticatedUser = authenticationManager.authenticate(authenticationToken);
         var JWTToken = tokenService.generatedToken((User) authenticatedUser.getPrincipal());
