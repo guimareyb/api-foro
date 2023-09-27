@@ -46,15 +46,15 @@ public class Topic {
         this.course = dataTopicInsert.course();
     }
 
-    public void updateData(DataTopicUpdate updateDataTopic){
-        if (updateDataTopic.tittle() !=null){
-            this.tittle = updateDataTopic.tittle();
+    public void updateData(DataTopicUpdate dataTopicUpdate){
+        if (dataTopicUpdate.tittle() !=null){
+            this.tittle = dataTopicUpdate.tittle();
         }
-        if (updateDataTopic.message() !=null){
-            this.message = updateDataTopic.message();
+        if (dataTopicUpdate.message() !=null){
+            this.message = dataTopicUpdate.message();
         }
-        if (updateDataTopic.course() !=null){
-            this.course = updateDataTopic.course();
+        if (dataTopicUpdate.course() !=null){
+            this.course = dataTopicUpdate.course();
         }
     }
 
