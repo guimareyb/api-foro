@@ -1,9 +1,6 @@
 package com.foro.apiforo.Controller;
 
 import com.foro.apiforo.domain.topic.*;
-import com.foro.apiforo.domain.user.DataUserResponse;
-import com.foro.apiforo.domain.user.User;
-import com.foro.apiforo.domain.user.UserRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +22,12 @@ public class TopicController {
     @Autowired
     private TopicRepository topicRepository;
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
     private TopicService service;
 
     @PostMapping
     public ResponseEntity<DataTopicResponse> insertTopic(@Valid @RequestBody DataTopicInsert dataTopicInsert,
                                                          UriComponentsBuilder uriComponentsBuilder) {
-        DataTopicResponse responseDataTopic = service.inserTopic(dataTopicInsert);
+        DataTopicResponse responseDataTopic = service.insertTopic(dataTopicInsert);
         URI url = uriComponentsBuilder.path("/topics/{id}").buildAndExpand(responseDataTopic.id()).toUri();
         return ResponseEntity.created(url).body(responseDataTopic);
     }
@@ -51,9 +46,7 @@ public class TopicController {
     @PutMapping
     @Transactional
     public ResponseEntity<DataTopicResponse> updateTopic(@RequestBody @Valid DataTopicUpdate dataTopicUpdate){
-        Topic topic = topicRepository.getReferenceById(dataTopicUpdate.id());
-        topic.updateData(dataTopicUpdate);
-        DataTopicResponse dataTopicResponse = new DataTopicResponse(topic);
+        DataTopicResponse dataTopicResponse = service.UpdateTopic(dataTopicUpdate);
         return ResponseEntity.ok(dataTopicResponse);
     }
 

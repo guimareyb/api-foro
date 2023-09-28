@@ -19,15 +19,23 @@ public class TopicService {
     @Autowired
     private List<TopicsValidator> validators;
 
-    public DataTopicResponse inserTopic(DataTopicInsert dataTopicInsert){
+    public DataTopicResponse insertTopic(DataTopicInsert dataTopicInsert){
         if (!userRepository.findById(dataTopicInsert.userId()).isPresent()){
             throw new IntegrityValidation("This id for the user was not found");
         }
 
-        validators.forEach(v -> v.validar(dataTopicInsert));
+        validators.forEach(v -> v.validar(dataTopicInsert, null));
 
         User user = userRepository.findById(dataTopicInsert.userId()).get();
         Topic topic = topicRepository.save(new Topic(dataTopicInsert, user));
+        return new DataTopicResponse(topic);
+    }
+
+    public DataTopicResponse UpdateTopic(DataTopicUpdate dataTopicUpdate){
+        validators.forEach(v -> v.validar(null, dataTopicUpdate));
+
+        Topic topic = topicRepository.getReferenceById(dataTopicUpdate.id());
+        topic.updateData(dataTopicUpdate);
         return new DataTopicResponse(topic);
     }
 
