@@ -16,4 +16,20 @@ public interface TopicRepository extends JpaRepository<Topic, Long> {
             """)
     Boolean findActiveById(Long idTopic);
 
+    @Query("""
+            SELECT EXISTS(
+                SELECT t FROM Topic t
+                WHERE t.message =:message
+            ) AS duplicate_message
+            """)
+    Boolean findDuplicateMessage(String message);
+
+    @Query("""
+            SELECT EXISTS(
+                SELECT t FROM Topic t
+                WHERE t.tittle =:tittle
+            ) AS duplicate_tittle
+            """)
+    Boolean findDuplicateTittle(String tittle);
+
 }

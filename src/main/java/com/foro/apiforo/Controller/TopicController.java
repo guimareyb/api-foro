@@ -18,6 +18,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 
 @RestController
+@ResponseBody
 @RequestMapping("/topics")
 public class TopicController {
 
@@ -25,14 +26,14 @@ public class TopicController {
     private TopicRepository topicRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private TopicService service;
 
     @PostMapping
     public ResponseEntity<DataTopicResponse> insertTopic(@Valid @RequestBody DataTopicInsert dataTopicInsert,
                                                          UriComponentsBuilder uriComponentsBuilder) {
-        User user = userRepository.findById(dataTopicInsert.userId()).get();
-        Topic topic = topicRepository.save(new Topic(dataTopicInsert, user));
-        DataTopicResponse responseDataTopic = new DataTopicResponse(topic);
-        URI url = uriComponentsBuilder.path("/topics/{id}").buildAndExpand(topic.getId()).toUri();
+        DataTopicResponse responseDataTopic = service.inserTopic(dataTopicInsert);
+        URI url = uriComponentsBuilder.path("/topics/{id}").buildAndExpand(responseDataTopic.id()).toUri();
         return ResponseEntity.created(url).body(responseDataTopic);
     }
 
