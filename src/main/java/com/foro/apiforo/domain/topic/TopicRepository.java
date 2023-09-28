@@ -10,12 +10,14 @@ public interface TopicRepository extends JpaRepository<Topic, Long> {
 
     Page<Topic> findByFlagTrue(Pageable pageable);
 
+    //Verifica si el topic esta activo
     @Query("""
             select t.flag from Topic t
             where t.id =:idTopic
             """)
     Boolean findActiveById(Long idTopic);
 
+    //Verifica si ya existe un mensaje igual
     @Query("""
             SELECT EXISTS(
                 SELECT t FROM Topic t
@@ -24,6 +26,7 @@ public interface TopicRepository extends JpaRepository<Topic, Long> {
             """)
     Boolean findDuplicateMessage(String message);
 
+    //Verifica si ya existe un titulo igual
     @Query("""
             SELECT EXISTS(
                 SELECT t FROM Topic t
