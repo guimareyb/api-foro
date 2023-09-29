@@ -28,15 +28,14 @@ public class AnswerController {
     private UserRepository userRepository;
     @Autowired
     private TopicRepository topicRepository;
+    @Autowired
+    private AnswerService service;
 
     @PostMapping
     public ResponseEntity<DataAnswerResponse> insertAnswer(@Valid @RequestBody DataAnswerInsert dataAnswerInsert,
                                                            UriComponentsBuilder uriComponentsBuilder){
-        User user = userRepository.findById(dataAnswerInsert.userId()).get();
-        Topic topic = topicRepository.findById(dataAnswerInsert.topicId()).get();
-        Answer answer = answerRepository.save(new Answer(dataAnswerInsert, user, topic));
-        DataAnswerResponse dataAnswerResponse = new DataAnswerResponse(answer);
-        URI url = uriComponentsBuilder.path("/topics/{id}").buildAndExpand(topic.getId()).toUri();
+        DataAnswerResponse dataAnswerResponse= service.insertAnswer(dataAnswerInsert);
+        URI url = uriComponentsBuilder.path("/topics/{id}").buildAndExpand(dataAnswerResponse.id()).toUri();
         return ResponseEntity.created(url).body(dataAnswerResponse);
     }
 
