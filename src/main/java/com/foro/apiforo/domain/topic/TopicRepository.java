@@ -22,17 +22,19 @@ public interface TopicRepository extends JpaRepository<Topic, Long> {
             SELECT EXISTS(
                 SELECT t FROM Topic t
                 WHERE t.message =:message
+                AND (:id IS NULL OR t.id != :id)
             ) AS duplicate_message
             """)
-    Boolean findDuplicateMessage(String message);
+    Boolean findDuplicateMessage(String message, Long id);
 
     //Verifica si ya existe un titulo igual
     @Query("""
             SELECT EXISTS(
                 SELECT t FROM Topic t
                 WHERE t.tittle =:tittle
+                AND (:id IS NULL OR t.id != :id)
             ) AS duplicate_tittle
             """)
-    Boolean findDuplicateTittle(String tittle);
+    Boolean findDuplicateTittle(String tittle, Long id);
 
 }
